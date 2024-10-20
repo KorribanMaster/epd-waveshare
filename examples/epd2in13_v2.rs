@@ -1,5 +1,6 @@
 #![deny(warnings)]
 
+use anyhow;
 use embedded_graphics::{
     mono_font::MonoTextStyleBuilder,
     prelude::*,
@@ -16,7 +17,7 @@ use epd_waveshare::{
 use linux_embedded_hal::{
     spidev::{self, SpidevOptions},
     sysfs_gpio::Direction,
-    Delay, SPIError, SpidevDevice, SysfsPin,
+    Delay, SpidevDevice, SysfsPin,
 };
 
 // The pins in this example are for the Universal e-Paper Raw Panel Driver HAT
@@ -24,7 +25,7 @@ use linux_embedded_hal::{
 // needs to be run with sudo because of some sysfs_gpio permission problems and follow-up timing problems
 // see https://github.com/rust-embedded/rust-sysfs-gpio/issues/5 and follow-up issues
 
-fn main() -> Result<(), SPIError> {
+fn main() -> Result<(), anyhow::Error> {
     // Configure SPI
     // Settings are taken from
     let mut spi = SpidevDevice::open("/dev/spidev0.0").expect("spidev directory");
@@ -63,7 +64,7 @@ fn main() -> Result<(), SPIError> {
     let mut delay = Delay {};
 
     let mut epd2in13 =
-        Epd2in13::new(&mut spi, busy, dc, rst, &mut delay, None).expect("eink initalize error");
+        Epd2in13::new(&mut spi, busy, dc, rst, None).expect("eink initalize error");
 
     //println!("Test all the rotations");
     let mut display = Display2in13::default();
@@ -80,9 +81,11 @@ fn main() -> Result<(), SPIError> {
     display.set_rotation(DisplayRotation::Rotate270);
     draw_text(&mut display, "Rotate 270!", 5, 50);
 
-    epd2in13.update_frame(&mut spi, display.buffer(), &mut delay)?;
     epd2in13
-        .display_frame(&mut spi, &mut delay)
+        .update_frame(&mut spi, display.buffer()).await
+        .map_err(anyhow::Error::msg)?;
+    epd2in13
+        .display_frame(&mut spi, &mut delay).await
         .expect("display frame new graphics");
     delay.delay_ms(5000);
 
@@ -124,9 +127,10 @@ fn main() -> Result<(), SPIError> {
     // Demonstrating how to use the partial refresh feature of the screen.
     // Real animations can be used.
     epd2in13
-        .set_refresh(&mut spi, &mut delay, RefreshLut::Quick)
-        .unwrap();
-    epd2in13.clear_frame(&mut spi, &mut delay).unwrap();
+        .set_refresh(&mut spi, &mut delay, RefreshLut::Quick).await
+        .map_err(anyhow::Error::msg)?;
+    epd2in13.clear_frame(&mut spi, &mut delay).await
+        .map_err(anyhow::Error::msg)?;
 
     // a moving `Hello World!`
     let limit = 10;
@@ -143,8 +147,8 @@ fn main() -> Result<(), SPIError> {
     // the screen can refresh for this kind of change (small single character)
     display.clear(Color::White).ok();
     epd2in13
-        .update_and_display_frame(&mut spi, display.buffer(), &mut delay)
-        .unwrap();
+        .update_and_display_frame(&mut spi, display.buffer(), &mut delay).await
+        .map_err(anyhow::Error::msg)?;
 
     let spinner = ["|", "/", "-", "\\"];
     for i in 0..10 {
@@ -156,7 +160,9 @@ fn main() -> Result<(), SPIError> {
     }
 
     println!("Finished tests - going to sleep");
-    epd2in13.sleep(&mut spi, &mut delay)
+    epd2in13
+        .sleep(&mut spi).await
+        .map_err(anyhow::Error::msg)
 }
 
 fn draw_text(display: &mut Display2in13, text: &str, x: i32, y: i32) {

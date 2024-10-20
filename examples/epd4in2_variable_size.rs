@@ -1,6 +1,7 @@
 #![deny(warnings)]
 #![deny(warnings)]
 
+use anyhow;
 use embedded_graphics::{
     mono_font::MonoTextStyleBuilder,
     prelude::*,
@@ -17,14 +18,14 @@ use epd_waveshare::{
 use linux_embedded_hal::{
     spidev::{self, SpidevOptions},
     sysfs_gpio::Direction,
-    Delay, SPIError, SpidevDevice, SysfsPin,
+    Delay, SpidevDevice, SysfsPin,
 };
 
 // activate spi, gpio in raspi-config
 // needs to be run with sudo because of some sysfs_gpio permission problems and follow-up timing problems
 // see https://github.com/rust-embedded/rust-sysfs-gpio/issues/5 and follow-up issues
 
-fn main() -> Result<(), SPIError> {
+fn main() -> Result<(), anyhow::Error> {
     // Configure SPI
     // Settings are taken from
     let mut spi = SpidevDevice::open("/dev/spidev0.0").expect("spidev directory");
@@ -63,7 +64,7 @@ fn main() -> Result<(), SPIError> {
     let mut delay = Delay {};
 
     let mut epd4in2 =
-        Epd4in2::new(&mut spi, busy, dc, rst, &mut delay, None).expect("eink initalize error");
+        Epd4in2::new(&mut spi, busy, dc, rst, None).expect("eink initalize error");
 
     println!("Test all the rotations");
 
@@ -140,17 +141,19 @@ fn main() -> Result<(), SPIError> {
         draw_text(&mut display, "  Hello World! ", 5 + i * 12, 50);
 
         epd4in2
-            .update_partial_frame(&mut spi, &mut delay, display.buffer(), x, y, width, height)
-            .unwrap();
+            .update_partial_frame(&mut spi, isplay.buffer(), x, y, width, height).await
+        .map_err(anyhow::Error::msg)?;
         epd4in2
-            .display_frame(&mut spi, &mut delay)
+            .display_frame(&mut spi).await
             .expect("display frame new graphics");
 
         delay.delay_ms(1_000);
     }
 
     println!("Finished tests - going to sleep");
-    epd4in2.sleep(&mut spi, &mut delay)
+    epd4in2
+        .sleep(&mut spi).await
+        .map_err(anyhow::Error::msg)
 }
 
 fn draw_text(display: &mut impl DrawTarget<Color = Color>, text: &str, x: i32, y: i32) {
