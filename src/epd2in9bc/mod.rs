@@ -107,13 +107,13 @@ pub struct Epd2in9bc<SPI, BUSY, DC, RST> {
 impl<SPI, BUSY, DC, RST> ErrorType<SPI, BUSY, DC, RST> for Epd2in9bc<SPI, BUSY, DC, RST>
 where
     SPI: SpiDevice,
-    SPI::Error: Copy + Debug + Display,
+    SPI::Error: Copy + Debug,
     BUSY: InputPin + Wait,
-    BUSY::Error: Copy + Debug + Display,
+    BUSY::Error: Copy + Debug,
     DC: OutputPin,
-    DC::Error: Copy + Debug + Display,
+    DC::Error: Copy + Debug,
     RST: OutputPin,
-    RST::Error: Copy + Debug + Display,
+    RST::Error: Copy + Debug,
 {
     type Error = ErrorKind<SPI, BUSY, DC, RST>;
 }
@@ -121,13 +121,13 @@ where
 impl<SPI, BUSY, DC, RST> InternalWiAdditions<SPI, BUSY, DC, RST> for Epd2in9bc<SPI, BUSY, DC, RST>
 where
     SPI: SpiDevice,
-    SPI::Error: Copy + Debug + Display,
+    SPI::Error: Copy + Debug,
     BUSY: InputPin + Wait,
-    BUSY::Error: Copy + Debug + Display,
+    BUSY::Error: Copy + Debug,
     DC: OutputPin,
-    DC::Error: Copy + Debug + Display,
+    DC::Error: Copy + Debug,
     RST: OutputPin,
-    RST::Error: Copy + Debug + Display,
+    RST::Error: Copy + Debug,
 {
     async fn init(&mut self, spi: &mut SPI) -> Result<(), Self::Error> {
         // Values taken from datasheet and sample code
@@ -171,13 +171,13 @@ impl<SPI, BUSY, DC, RST> WaveshareThreeColorDisplay<SPI, BUSY, DC, RST>
     for Epd2in9bc<SPI, BUSY, DC, RST>
 where
     SPI: SpiDevice,
-    SPI::Error: Copy + Debug + Display,
+    SPI::Error: Copy + Debug,
     BUSY: InputPin + Wait,
-    BUSY::Error: Copy + Debug + Display,
+    BUSY::Error: Copy + Debug,
     DC: OutputPin,
-    DC::Error: Copy + Debug + Display,
+    DC::Error: Copy + Debug,
     RST: OutputPin,
-    RST::Error: Copy + Debug + Display,
+    RST::Error: Copy + Debug,
 {
     async fn update_color_frame(
         &mut self,
@@ -225,13 +225,13 @@ where
 impl<SPI, BUSY, DC, RST> WaveshareDisplay<SPI, BUSY, DC, RST> for Epd2in9bc<SPI, BUSY, DC, RST>
 where
     SPI: SpiDevice,
-    SPI::Error: Copy + Debug + Display,
+    SPI::Error: Copy + Debug,
     BUSY: InputPin + Wait,
-    BUSY::Error: Copy + Debug + Display,
+    BUSY::Error: Copy + Debug,
     DC: OutputPin,
-    DC::Error: Copy + Debug + Display,
+    DC::Error: Copy + Debug,
     RST: OutputPin,
-    RST::Error: Copy + Debug + Display,
+    RST::Error: Copy + Debug,
 {
     type DisplayColor = Color;
     async fn new(
@@ -377,13 +377,13 @@ where
 impl<SPI, BUSY, DC, RST> Epd2in9bc<SPI, BUSY, DC, RST>
 where
     SPI: SpiDevice,
-    SPI::Error: Copy + Debug + Display,
+    SPI::Error: Copy + Debug,
     BUSY: InputPin + Wait,
-    BUSY::Error: Copy + Debug + Display,
+    BUSY::Error: Copy + Debug,
     DC: OutputPin,
-    DC::Error: Copy + Debug + Display,
+    DC::Error: Copy + Debug,
     RST: OutputPin,
-    RST::Error: Copy + Debug + Display,
+    RST::Error: Copy + Debug,
 {
     async fn command(
         &mut self,

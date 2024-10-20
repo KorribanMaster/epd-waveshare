@@ -139,11 +139,8 @@ fn main() -> Result<(), anyhow::Error> {
     // we used three colors, so we need to update both bw-buffer and chromatic-buffer
 
     epd2in13
-        .update_color_frame(
-            &mut spi,
-            display.bw_buffer(),
-            display.chromatic_buffer(),
-        ).await
+        .update_color_frame(&mut spi, display.bw_buffer(), display.chromatic_buffer())
+        .await
         .map_err(anyhow::Error::msg)?;
     epd2in13
         .display_frame(&mut spi, &mut delay)
@@ -155,11 +152,8 @@ fn main() -> Result<(), anyhow::Error> {
     // clear both bw buffer and chromatic buffer
     display.clear(TriColor::White).ok();
     epd2in13
-        .update_color_frame(
-            &mut spi,
-            display.bw_buffer(),
-            display.chromatic_buffer(),
-        ).await
+        .update_color_frame(&mut spi, display.bw_buffer(), display.chromatic_buffer())
+        .await
         .map_err(anyhow::Error::msg)?;
     epd2in13
         .display_frame(&mut spi)
@@ -167,10 +161,7 @@ fn main() -> Result<(), anyhow::Error> {
         .map_err(anyhow::Error::msg)?;
 
     println!("Finished tests - going to sleep");
-    epd2in13
-        .sleep(&mut spi)
-        .await
-        .map_err(anyhow::Error::msg)
+    epd2in13.sleep(&mut spi).await.map_err(anyhow::Error::msg)
 }
 
 fn draw_text(display: &mut Display2in13bc, text: &str, x: i32, y: i32) {

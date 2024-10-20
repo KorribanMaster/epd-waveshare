@@ -49,13 +49,13 @@ pub struct Epd5in65f<SPI, BUSY, DC, RST> {
 impl<SPI, BUSY, DC, RST> ErrorType<SPI, BUSY, DC, RST> for Epd5in65f<SPI, BUSY, DC, RST>
 where
     SPI: SpiDevice,
-    SPI::Error: Copy + Debug + Display,
+    SPI::Error: Copy + Debug,
     BUSY: InputPin + Wait,
-    BUSY::Error: Copy + Debug + Display,
+    BUSY::Error: Copy + Debug,
     DC: OutputPin,
-    DC::Error: Copy + Debug + Display,
+    DC::Error: Copy + Debug,
     RST: OutputPin,
-    RST::Error: Copy + Debug + Display,
+    RST::Error: Copy + Debug,
 {
     type Error = ErrorKind<SPI, BUSY, DC, RST>;
 }
@@ -63,13 +63,13 @@ where
 impl<SPI, BUSY, DC, RST> InternalWiAdditions<SPI, BUSY, DC, RST> for Epd5in65f<SPI, BUSY, DC, RST>
 where
     SPI: SpiDevice,
-    SPI::Error: Copy + Debug + Display,
+    SPI::Error: Copy + Debug,
     BUSY: InputPin + Wait,
-    BUSY::Error: Copy + Debug + Display,
+    BUSY::Error: Copy + Debug,
     DC: OutputPin,
-    DC::Error: Copy + Debug + Display,
+    DC::Error: Copy + Debug,
     RST: OutputPin,
-    RST::Error: Copy + Debug + Display,
+    RST::Error: Copy + Debug,
 {
     async fn init(&mut self, spi: &mut SPI) -> Result<(), Self::Error> {
         // Reset the device
@@ -104,13 +104,13 @@ where
 impl<SPI, BUSY, DC, RST> WaveshareDisplay<SPI, BUSY, DC, RST> for Epd5in65f<SPI, BUSY, DC, RST>
 where
     SPI: SpiDevice,
-    SPI::Error: Copy + Debug + Display,
+    SPI::Error: Copy + Debug,
     BUSY: InputPin + Wait,
-    BUSY::Error: Copy + Debug + Display,
+    BUSY::Error: Copy + Debug,
     DC: OutputPin,
-    DC::Error: Copy + Debug + Display,
+    DC::Error: Copy + Debug,
     RST: OutputPin,
-    RST::Error: Copy + Debug + Display,
+    RST::Error: Copy + Debug,
 {
     type DisplayColor = OctColor;
     async fn new(
@@ -224,13 +224,13 @@ where
 impl<SPI, BUSY, DC, RST> Epd5in65f<SPI, BUSY, DC, RST>
 where
     SPI: SpiDevice,
-    SPI::Error: Copy + Debug + Display,
+    SPI::Error: Copy + Debug,
     BUSY: InputPin + Wait,
-    BUSY::Error: Copy + Debug + Display,
+    BUSY::Error: Copy + Debug,
     DC: OutputPin,
-    DC::Error: Copy + Debug + Display,
+    DC::Error: Copy + Debug,
     RST: OutputPin,
-    RST::Error: Copy + Debug + Display,
+    RST::Error: Copy + Debug,
 {
     async fn command(
         &mut self,
@@ -257,7 +257,10 @@ where
         self.interface.cmd_with_data(spi, command, data).await
     }
 
-    async fn wait_busy_low(&mut self, spi: &mut SPI) -> Result<(), <Self as ErrorType<SPI, BUSY, DC, RST>>::Error> {
+    async fn wait_busy_low(
+        &mut self,
+        spi: &mut SPI,
+    ) -> Result<(), <Self as ErrorType<SPI, BUSY, DC, RST>>::Error> {
         self.interface.wait_until_idle(spi, false).await
     }
 

@@ -94,13 +94,13 @@ pub struct Epd1in54<SPI, BUSY, DC, RST> {
 impl<SPI, BUSY, DC, RST> ErrorType<SPI, BUSY, DC, RST> for Epd1in54<SPI, BUSY, DC, RST>
 where
     SPI: SpiDevice,
-    SPI::Error: Copy + Debug + Display,
+    SPI::Error: Copy + Debug,
     BUSY: InputPin + Wait,
-    BUSY::Error: Copy + Debug + Display,
+    BUSY::Error: Copy + Debug,
     DC: OutputPin,
-    DC::Error: Copy + Debug + Display,
+    DC::Error: Copy + Debug,
     RST: OutputPin,
-    RST::Error: Copy + Debug + Display,
+    RST::Error: Copy + Debug,
 {
     type Error = ErrorKind<SPI, BUSY, DC, RST>;
 }
@@ -108,13 +108,13 @@ where
 impl<SPI, BUSY, DC, RST> InternalWiAdditions<SPI, BUSY, DC, RST> for Epd1in54<SPI, BUSY, DC, RST>
 where
     SPI: SpiDevice,
-    SPI::Error: Copy + Debug + Display,
+    SPI::Error: Copy + Debug,
     BUSY: InputPin + Wait,
-    BUSY::Error: Copy + Debug + Display,
+    BUSY::Error: Copy + Debug,
     DC: OutputPin,
-    DC::Error: Copy + Debug + Display,
+    DC::Error: Copy + Debug,
     RST: OutputPin,
-    RST::Error: Copy + Debug + Display,
+    RST::Error: Copy + Debug,
 {
     async fn init(&mut self, spi: &mut SPI) -> Result<(), Self::Error> {
         self.interface.reset(spi, 10_000, 10_000).await?;
@@ -171,13 +171,13 @@ where
 impl<SPI, BUSY, DC, RST> WaveshareDisplay<SPI, BUSY, DC, RST> for Epd1in54<SPI, BUSY, DC, RST>
 where
     SPI: SpiDevice,
-    SPI::Error: Copy + Debug + Display,
+    SPI::Error: Copy + Debug,
     BUSY: InputPin + Wait,
-    BUSY::Error: Copy + Debug + Display,
+    BUSY::Error: Copy + Debug,
     DC: OutputPin,
-    DC::Error: Copy + Debug + Display,
+    DC::Error: Copy + Debug,
     RST: OutputPin,
-    RST::Error: Copy + Debug + Display,
+    RST::Error: Copy + Debug,
 {
     type DisplayColor = Color;
     fn width(&self) -> u32 {
@@ -314,13 +314,13 @@ where
 impl<SPI, BUSY, DC, RST> Epd1in54<SPI, BUSY, DC, RST>
 where
     SPI: SpiDevice,
-    SPI::Error: Copy + Debug + Display,
+    SPI::Error: Copy + Debug,
     BUSY: InputPin + Wait,
-    BUSY::Error: Copy + Debug + Display,
+    BUSY::Error: Copy + Debug,
     DC: OutputPin,
-    DC::Error: Copy + Debug + Display,
+    DC::Error: Copy + Debug,
     RST: OutputPin,
-    RST::Error: Copy + Debug + Display,
+    RST::Error: Copy + Debug,
 {
     pub(crate) async fn use_full_frame(
         &mut self,

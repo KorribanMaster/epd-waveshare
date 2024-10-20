@@ -8,13 +8,13 @@ use crate::error::ErrorKind;
 pub trait Error<SPI, BUSY, DC, RST>: core::fmt::Debug
 where
     SPI: SpiDevice,
-    SPI::Error: Copy + Debug + Display,
+    SPI::Error: Copy + Debug,
     BUSY: InputPin + Wait,
-    BUSY::Error: Copy + Debug + Display,
+    BUSY::Error: Copy + Debug,
     DC: OutputPin,
-    DC::Error: Copy + Debug + Display,
+    DC::Error: Copy + Debug,
     RST: OutputPin,
-    RST::Error: Copy + Debug + Display,
+    RST::Error: Copy + Debug,
 {
     fn kind(&self) -> &ErrorKind<SPI, BUSY, DC, RST>;
 }
@@ -22,13 +22,13 @@ where
 impl<SPI, BUSY, DC, RST> Error<SPI, BUSY, DC, RST> for core::convert::Infallible
 where
     SPI: SpiDevice,
-    SPI::Error: Copy + Debug + Display,
+    SPI::Error: Copy + Debug,
     BUSY: InputPin + Wait,
-    BUSY::Error: Copy + Debug + Display,
+    BUSY::Error: Copy + Debug,
     DC: OutputPin,
-    DC::Error: Copy + Debug + Display,
+    DC::Error: Copy + Debug,
     RST: OutputPin,
-    RST::Error: Copy + Debug + Display,
+    RST::Error: Copy + Debug,
 {
     fn kind(&self) -> &ErrorKind<SPI, BUSY, DC, RST> {
         match *self {}
@@ -38,13 +38,13 @@ where
 pub trait ErrorType<SPI, BUSY, DC, RST>
 where
     SPI: SpiDevice,
-    SPI::Error: Copy + Debug + Display,
+    SPI::Error: Copy + Debug,
     BUSY: InputPin + Wait,
-    BUSY::Error: Copy + Debug + Display,
+    BUSY::Error: Copy + Debug,
     DC: OutputPin,
-    DC::Error: Copy + Debug + Display,
+    DC::Error: Copy + Debug,
     RST: OutputPin,
-    RST::Error: Copy + Debug + Display,
+    RST::Error: Copy + Debug,
 {
     type Error: Error<SPI, BUSY, DC, RST>;
 }
@@ -70,13 +70,13 @@ pub(crate) trait InternalWiAdditions<SPI, BUSY, DC, RST>:
     ErrorType<SPI, BUSY, DC, RST>
 where
     SPI: SpiDevice,
-    SPI::Error: Copy + Debug + Display,
+    SPI::Error: Copy + Debug,
     BUSY: InputPin + Wait,
-    BUSY::Error: Copy + Debug + Display,
+    BUSY::Error: Copy + Debug,
     DC: OutputPin,
-    DC::Error: Copy + Debug + Display,
+    DC::Error: Copy + Debug,
     RST: OutputPin,
-    RST::Error: Copy + Debug + Display,
+    RST::Error: Copy + Debug,
 {
     /// This initialises the EPD and powers it up
     ///
@@ -96,13 +96,13 @@ pub trait WaveshareThreeColorDisplay<SPI, BUSY, DC, RST>:
     WaveshareDisplay<SPI, BUSY, DC, RST>
 where
     SPI: SpiDevice,
-    SPI::Error: Copy + Debug + Display,
+    SPI::Error: Copy + Debug,
     BUSY: InputPin + Wait,
-    BUSY::Error: Copy + Debug + Display,
+    BUSY::Error: Copy + Debug,
     DC: OutputPin,
-    DC::Error: Copy + Debug + Display,
+    DC::Error: Copy + Debug,
     RST: OutputPin,
-    RST::Error: Copy + Debug + Display,
+    RST::Error: Copy + Debug,
 {
     /// Transmit data to the SRAM of the EPD
     ///
@@ -180,13 +180,13 @@ where
 pub trait WaveshareDisplay<SPI, BUSY, DC, RST>: ErrorType<SPI, BUSY, DC, RST>
 where
     SPI: SpiDevice,
-    SPI::Error: Copy + Debug + Display,
+    SPI::Error: Copy + Debug,
     BUSY: InputPin + Wait,
-    BUSY::Error: Copy + Debug + Display,
+    BUSY::Error: Copy + Debug,
     DC: OutputPin,
-    DC::Error: Copy + Debug + Display,
+    DC::Error: Copy + Debug,
     RST: OutputPin,
-    RST::Error: Copy + Debug + Display,
+    RST::Error: Copy + Debug,
 {
     /// The Color Type used by the Display
     type DisplayColor;
@@ -332,13 +332,13 @@ where
 pub trait QuickRefresh<SPI, BUSY, DC, RST>: ErrorType<SPI, BUSY, DC, RST>
 where
     SPI: SpiDevice,
-    SPI::Error: Copy + Debug + Display,
+    SPI::Error: Copy + Debug,
     BUSY: InputPin + Wait,
-    BUSY::Error: Copy + Debug + Display,
+    BUSY::Error: Copy + Debug,
     DC: OutputPin,
-    DC::Error: Copy + Debug + Display,
+    DC::Error: Copy + Debug,
     RST: OutputPin,
-    RST::Error: Copy + Debug + Display,
+    RST::Error: Copy + Debug,
 {
     /// Updates the old frame.
     async fn update_old_frame(&mut self, spi: &mut SPI, buffer: &[u8]) -> Result<(), Self::Error>;

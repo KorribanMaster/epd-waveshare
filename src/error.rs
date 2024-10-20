@@ -63,41 +63,16 @@ where
 {
 }
 
-impl<SPI, BUSY, DC, RST> Display for ErrorKind<SPI, BUSY, DC, RST>
-where
-    SPI: SpiDevice,
-    SPI::Error: Copy + Debug + Display,
-    BUSY: InputPin + Wait,
-    BUSY::Error: Copy + Debug + Display,
-    DC: OutputPin,
-    DC::Error: Copy + Debug + Display,
-    RST: OutputPin,
-    RST::Error: Copy + Debug + Display,
-{
-    fn fmt(&self, f: &mut Formatter<'_>) -> core::fmt::Result {
-        match self {
-            Self::SpiError(err) => Display::fmt(&err, f),
-            Self::BusyError(err) => Display::fmt(&err, f),
-            Self::DcError(err) => Display::fmt(&err, f),
-            Self::RstError(err) => Display::fmt(&err, f),
-            Self::Other => write!(
-                f,
-                "A different error occurred. The original error may contain more information"
-            ),
-        }
-    }
-}
-
 impl<SPI, BUSY, DC, RST> Debug for ErrorKind<SPI, BUSY, DC, RST>
 where
     SPI: SpiDevice,
-    SPI::Error: Copy + Debug + Display,
+    SPI::Error: Copy + Debug,
     BUSY: InputPin + Wait,
-    BUSY::Error: Copy + Debug + Display,
+    BUSY::Error: Copy + Debug,
     DC: OutputPin,
-    DC::Error: Copy + Debug + Display,
+    DC::Error: Copy + Debug,
     RST: OutputPin,
-    RST::Error: Copy + Debug + Display,
+    RST::Error: Copy + Debug,
 {
     fn fmt(&self, f: &mut Formatter<'_>) -> core::fmt::Result {
         match self {
@@ -116,13 +91,13 @@ where
 impl<SPI, BUSY, DC, RST> Error<SPI, BUSY, DC, RST> for ErrorKind<SPI, BUSY, DC, RST>
 where
     SPI: SpiDevice,
-    SPI::Error: Copy + Debug + Display,
+    SPI::Error: Copy + Debug,
     BUSY: InputPin + Wait,
-    BUSY::Error: Copy + Debug + Display,
+    BUSY::Error: Copy + Debug,
     DC: OutputPin,
-    DC::Error: Copy + Debug + Display,
+    DC::Error: Copy + Debug,
     RST: OutputPin,
-    RST::Error: Copy + Debug + Display,
+    RST::Error: Copy + Debug,
 {
     fn kind(&self) -> &ErrorKind<SPI, BUSY, DC, RST> {
         self

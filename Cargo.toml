@@ -23,7 +23,7 @@ embedded-graphics-core = { version = "0.4", optional = true }
 embedded-hal = { version = "1.0" }
 embedded-hal-async = { version = "1.0" }
 bit_field = "0.10.2"
-
+defmt ={ version = "0.3", optional = true}
 [dev-dependencies]
 embedded-graphics = "0.8.1"
 embedded-hal-bus = { version = "0.2.0", features = ["async"] }
@@ -32,6 +32,7 @@ embedded-hal-mock = { version = "0.11.1", default-features = false, features = [
     "eh1",
 ] }
 anyhow = { version = "1.0", default-features = false }
+
 
 [target.'cfg(unix)'.dev-dependencies]
 linux-embedded-hal = "0.4.0"
@@ -58,12 +59,12 @@ required-features = ["linux-dev"]
 
 [features]
 # Remove the linux-dev feature to build the tests on non  unix systems
-default = ["graphics", "linux-dev", "epd2in13_v3"]
+default = ["graphics", "linux-dev", "epd2in13_v3", "defmt"]
 
 graphics = ["embedded-graphics-core"]
 epd2in13_v2 = []
 epd2in13_v3 = []
 linux-dev = []
-
+defmt = ["dep:defmt"]
 # Offers an alternative fast full lut for type_a displays, but the refreshed screen isnt as clean looking
 type_a_alternative_faster_lut = []
