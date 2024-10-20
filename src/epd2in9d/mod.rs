@@ -5,7 +5,7 @@
 //!
 //! Specification: https://www.waveshare.net/w/upload/b/b5/2.9inch_e-Paper_%28D%29_Specification.pdf
 
-use core::fmt::{Debug, Display};
+use core::fmt::Debug;
 use core::slice::from_raw_parts;
 
 use embedded_hal::digital::{InputPin, OutputPin};

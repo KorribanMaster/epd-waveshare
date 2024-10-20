@@ -1,5 +1,5 @@
 //! A simple Driver for the Waveshare 1.54" (C) E-Ink Display via SPI
-use core::fmt::{Debug, Display};
+use core::fmt::Debug;
 use embedded_hal::digital::{InputPin, OutputPin};
 use embedded_hal_async::{digital::Wait, spi::SpiDevice};
 

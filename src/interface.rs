@@ -1,5 +1,5 @@
 use crate::{error::ErrorKind, traits::Command};
-use core::fmt::{Debug, Display};
+use core::fmt::Debug;
 use core::marker::PhantomData;
 use embedded_hal::{
     digital::{InputPin, OutputPin},
